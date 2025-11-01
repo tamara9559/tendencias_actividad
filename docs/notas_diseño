@@ -1,0 +1,45 @@
+Notas de diseño (índices, tipos y reglas)
+
+Tipos elegidos
+
+INT / BIGINT UNSIGNED para PKs (bigint para ordenes por posible volumen mayor).
+
+VARCHAR para textos cortos (nombres, asignado, creador).
+
+TEXT para descripciones y detalles largos.
+
+ENUM para estado_global y estado_parcial para validar valores permitidos desde la BD (facilita consultas e integridad).
+
+TIMESTAMP con CURRENT_TIMESTAMP para creada_en, actualizada_en y timestamp en historial.
+
+JSON opcional en ordenes.metadata para campos extensibles (adjuntos, tags), nullable.
+
+Índices
+
+idx_ordenes_estado_global para consultas por estado (p. ej. tablero KPIs).
+
+idx_ordenes_creada_en para rangos/filtrado por fecha.
+
+idx_orden_area_orden, idx_orden_area_area para búsquedas por orden o por área.
+
+idx_orden_area_estado para filtros de estados parciales (p. ej. encontrar tareas vencidas).
+
+idx_historial_timestamp para paginación/historial eficiente.
+
+Reglas de integridad
+
+FK con ON DELETE CASCADE en orden_area y historial para mantener consistencia cuando se borre una orden (el historial y asignaciones se limpian).
+
+ON DELETE RESTRICT en areas para prevenir eliminación accidental de áreas que ya tienen asignaciones.
+
+CHECK (seg_acumulados >= 0) para evitar valores negativos (MySQL 8+).
+
+UNIQUE en areas.nombre para evitar duplicados.
+
+Consideraciones funcionales
+
+estado_global se calcula/actualiza desde la lógica de aplicación a partir de los estado_parcial de orden_area según tus reglas de negocio. Mantenerlo en la tabla ordenes permite consultas rápidas para KPIs; la fuente de verdad de cada área sigue siendo orden_area.estado_parcial.
+
+seg_acumulados en orden_area se incrementa por el temporizador y sirve para evaluar SLA por área. Puedes añadir triggers si quieres lógica en BD, pero es preferible manejar en la capa servicio para mayores control y trazabilidad.
+
+historial almacena eventos inmutables (registro auditable). Cada cambio de estado o acción importante debe registrar una fila en historial.

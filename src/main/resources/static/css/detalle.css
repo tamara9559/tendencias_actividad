@@ -1,0 +1,46 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f6f7fb;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: white;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ddd;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+.tabla-areas {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.tabla-areas th, .tabla-areas td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+    font-size: 0.9rem;
+}
+
+button.iniciar { background: #28a745; }
+button.pausar { background: #ffc107; }
+button.completar { background: #007bff; }
+button.sin-solucion { background: #dc3545; }
+button:hover { opacity: 0.85; }

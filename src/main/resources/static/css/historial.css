@@ -1,0 +1,15 @@
+body { font-family: Arial, Helvetica, sans-serif; background:#f4f6f8; margin:0; padding:20px; }
+.container { max-width:1000px; margin:0 auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.06); }
+h1 { margin-top:0; }
+.historial-table { width:100%; border-collapse:collapse; margin-top:16px; }
+.historial-table th, .historial-table td { padding:10px; border-bottom:1px solid #e6e9ee; text-align:left; }
+.historial-table thead th { background:#f1f5f9; }
+.event-timeout { background-color: #fff1f0; border-left: 4px solid #dc3545; }
+.event-critical { background-color: #fff7e6; border-left: 4px solid #ff8c00; }
+/* Simple timeline visual */
+#timelineContainer { margin-top:10px; display:flex; flex-direction:column; gap:8px; }
+.timeline-item { padding:8px 12px; border-radius:6px; background:#f8fafc; box-shadow: 0 1px 2px rgba(0,0,0,0.03); display:flex; gap:12px; align-items:center; }
+.timeline-timestamp { color:#6b7280; min-width:150px; font-size:0.9rem; }
+.timeline-badge { font-weight:600; padding:4px 8px; border-radius:4px; background:#e6f0ff; color:#1e40af; font-size:0.8rem; }
+.timeline-detail { flex:1; font-size:0.95rem; color:#111827; }
+@media (max-width:720px) { .timeline-timestamp { min-width:110px; } }

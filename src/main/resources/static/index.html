@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Tablero de Órdenes de Trabajo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f9fafb;
+      color: #222;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #2563eb;
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+    }
+
+    .kpi-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .kpi {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      width: 200px;
+      padding: 1rem;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .kpi:hover {
+      transform: scale(1.05);
+    }
+
+    .kpi h2 {
+      margin: 0;
+      color: #2563eb;
+    }
+
+    .filter-container {
+      text-align: center;
+      margin: 1rem;
+    }
+
+    select {
+      padding: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    table {
+      width: 90%;
+      margin: 1rem auto;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      padding: 0.8rem;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f3f4f6;
+    }
+
+    tr:hover {
+      background-color: #f9fafb;
+    }
+
+    @media (max-width: 768px) {
+      table {
+        font-size: 14px;
+      }
+      .kpi {
+        width: 45%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .kpi {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Gestión de Órdenes de Trabajo</h1>
+</header>
+
+<div class="kpi-container" role="region" aria-label="Indicadores clave">
+  <div class="kpi" tabindex="0">
+    <h2 id="kpi-total">0</h2>
+    <p>Total de Órdenes</p>
+  </div>
+  <div class="kpi" tabindex="0">
+    <h2 id="kpi-completadas">0</h2>
+    <p>Completadas</p>
+  </div>
+  <div class="kpi" tabindex="0">
+    <h2 id="kpi-pendientes">0</h2>
+    <p>Pendientes</p>
+  </div>
+  <div class="kpi" tabindex="0">
+    <h2 id="kpi-sin-solucion">0</h2>
+    <p>Sin Solución</p>
+  </div>
+</div>
+
+<div class="filter-container">
+  <label for="estado">Filtrar por estado:</label>
+  <select id="estado" aria-label="Filtro de estado">
+    <option value="">Todos</option>
+    <option value="NUEVA">Nueva</option>
+    <option value="ASIGNADA">Asignada</option>
+    <option value="EN_PROGRESO">En progreso</option>
+    <option value="PENDIENTE">Pendiente</option>
+    <option value="COMPLETADA">Completada</option>
+    <option value="CERRADA_SIN_SOLUCION">Sin solución</option>
+  </select>
+</div>
+
+<table aria-label="Lista de órdenes de trabajo">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Título</th>
+    <th>Estado Global</th>
+    <th>Áreas Asignadas</th>
+    <th>Última Actualización</th>
+  </tr>
+  </thead>
+  <tbody id="tabla-ordenes"></tbody>
+</table>
+
+<script>
+  const API_URL = "http://localhost:8080/ordenes";
+
+  async function cargarOrdenes(filtro = "") {
+    try {
+      const response = await fetch(filtro ? `${API_URL}?estado=${filtro}` : API_URL);
+      if (!response.ok) throw new Error("Error al obtener órdenes");
+      const data = await response.json();
+
+      renderizarKPIs(data);
+      renderizarTabla(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  function renderizarKPIs(ordenes) {
+    const total = ordenes.length;
+    const completadas = ordenes.filter(o => o.estadoGlobal === "COMPLETADA").length;
+    const pendientes = ordenes.filter(o => o.estadoGlobal === "PENDIENTE" || o.estadoGlobal === "EN_PROGRESO").length;
+    const sinSolucion = ordenes.filter(o => o.estadoGlobal === "CERRADA_SIN_SOLUCION").length;
+
+    document.getElementById("kpi-total").textContent = total;
+    document.getElementById("kpi-completadas").textContent = completadas;
+    document.getElementById("kpi-pendientes").textContent = pendientes;
+    document.getElementById("kpi-sin-solucion").textContent = sinSolucion;
+  }
+
+  function renderizarTabla(ordenes) {
+    const cuerpo = document.getElementById("tabla-ordenes");
+    cuerpo.innerHTML = "";
+
+    ordenes.forEach(o => {
+      const fila = document.createElement("tr");
+      fila.innerHTML = `
+                    <td>${o.id}</td>
+                    <td>${o.titulo}</td>
+                    <td>${o.estadoGlobal}</td>
+                    <td>${o.areasAsignadas || 0}</td>
+                    <td>${new Date(o.actualizadaEn).toLocaleString()}</td>
+                `;
+      cuerpo.appendChild(fila);
+    });
+  }
+
+  document.getElementById("estado").addEventListener("change", (e) => {
+    cargarOrdenes(e.target.value);
+  });
+
+  cargarOrdenes();
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+# Archivos de sistema
+*.class
+*.log
+*.tmp
+*.swp
+*.idea/
+*.iml
+*.DS_Store
+target/
+
+# Configuración local
+.env
+application.properties
+

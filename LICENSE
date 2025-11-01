@@ -1,0 +1,15 @@
+
+---
+
+## 🧱 `.env.example`
+
+```env
+# Configuración de la base de datos
+DB_URL=jdbc:mysql://localhost:3306/ordenes_sla
+DB_USERNAME=root
+DB_PASSWORD=
+
+# Parámetros del temporizador SLA
+SLA_SEG=60
+N_SEG=10
+ESTADO_TIMEOUT=PENDIENTE

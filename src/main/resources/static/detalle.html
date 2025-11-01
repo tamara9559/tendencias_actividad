@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detalle de Orden</title>
+  <link rel="stylesheet" href="css/detalle.css" />
+</head>
+<body>
+<main class="container">
+  <h1 id="tituloOrden">Detalle de Orden</h1>
+
+  <section class="info-general">
+    <p><strong>ID:</strong> <span id="ordenId"></span></p>
+    <p><strong>Título:</strong> <span id="ordenTitulo"></span></p>
+    <p><strong>Estado Global:</strong> <span id="ordenEstado"></span></p>
+    <p><strong>Actualizada:</strong> <span id="ordenActualizada"></span></p>
+  </section>
+
+  <h2>Áreas Asignadas</h2>
+  <table class="tabla-areas">
+    <thead>
+    <tr>
+      <th>Área</th>
+      <th>Responsable</th>
+      <th>Estado Parcial</th>
+      <th>Segundos</th>
+      <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody id="tablaAreas"></tbody>
+  </table>
+
+  <h2>Historial de Cambios</h2>
+  <ul id="listaHistorial"></ul>
+</main>
+
+<script src="js/detalle.js"></script>
+</body>
+</html>

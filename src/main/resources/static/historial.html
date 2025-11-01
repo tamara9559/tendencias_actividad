@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Historial de Orden</title>
+    <link rel="stylesheet" href="historial.css"/>
+</head>
+<body>
+<main class="container">
+    <h1>Historial de la Orden <span id="ordenIdTitle"></span></h1>
+    <div id="timelineContainer" aria-live="polite"></div>
+    <table id="historialTable" class="historial-table" aria-label="Historial de eventos">
+        <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>Actor</th>
+            <th>Evento</th>
+            <th>Detalle</th>
+            <th>Estado Global</th>
+        </tr>
+        </thead>
+        <tbody id="historialBody"></tbody>
+    </table>
+</main>
+<script src="historial.js"></script>
+</body>
+</html>
